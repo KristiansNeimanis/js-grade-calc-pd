@@ -46,6 +46,19 @@
 
       calculateBtn.addEventListener("click", handleClick);
 
+      function validation(n, p, mp) {
+        // Validate inputs
+        if (!n || isNaN(p) || isNaN(mp) || mp <= 0) {
+          resultDiv.innerHTML = "Lūdzu, aizpildiet visus laukus pareizi.";
+          return true;
+        }
+        if (p < 0 || p > mp) {
+          resultDiv.innerHTML =
+            "Iegūtie punkti nedrīkst pārsniegt maksimālos punktus.";
+          return true;
+        }
+      }
+
       function handleClick() {
         console.log("pushed");
         let name = nameInput.value;
@@ -53,29 +66,26 @@
         let maxPoints = parseFloat(maxPointsInput.value);
         let gradingScheme = gradingSchemeSelect.value;
 
-        // Validate inputs
-        if (!name || isNaN(points) || isNaN(maxPoints) || maxPoints <= 0) {
-          resultDiv.innerHTML = "Lūdzu, aizpildiet visus laukus pareizi.";
-          return;
-        }
-        if (points < 0 || points > maxPoints) {
-          resultDiv.innerHTML =
-            "Iegūtie punkti nedrīkst pārsniegt maksimālos punktus.";
+        if (validation(name, points, maxPoints)) {
           return;
         }
 
+        calculation(points, maxPoints, gradingScheme);
+      }
+
+      function calculation(p, mp, gs) {
         let grade = "";
-        if (gradingScheme === "percentage") {
-          const percentage = (points / maxPoints) * 100;
+        if (gs === "percentage") {
+          const percentage = (p / mp) * 100;
           grade = `Jūsu procentuālā vērtība ir: ${percentage.toFixed(2)}%`;
-        } else if (gradingScheme === "letter") {
-          if (points >= 90) {
+        } else if (gs === "letter") {
+          if (p >= 90) {
             grade = "Jūsu burtu vērtējums ir: A";
-          } else if (points >= 80) {
+          } else if (p >= 80) {
             grade = "Jūsu burtu vērtējums ir: B";
-          } else if (points >= 70) {
+          } else if (p >= 70) {
             grade = "Jūsu burtu vērtējums ir: C";
-          } else if (points >= 60) {
+          } else if (p >= 60) {
             grade = "Jūsu burtu vērtējums ir: D";
           } else {
             grade = "Jūsu burtu vērtējums ir: F";
